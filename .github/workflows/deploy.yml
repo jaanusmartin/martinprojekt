@@ -20,31 +20,27 @@ jobs:
           set -euo pipefail
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-
           printf '%s\n' "$SSH_PRIVATE_KEY" > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
 
-          ssh-keyscan -p "$SSH_PORT" -H "$SSH_SERVER" >> ~/.ssh/known_hosts
-
+          ssh-keyscan -H "$SSH_SERVER" >> ~/.ssh/known_hosts
           cat > ~/.ssh/config <<EOF
-          Host zone
-            HostName $SSH_SERVER
+          Host $SSH_SERVER
             User $SSH_USERNAME
-            Port $SSH_PORT
             IdentityFile ~/.ssh/deploy_key
             IdentitiesOnly yes
             StrictHostKeyChecking yes
           EOF
           chmod 600 ~/.ssh/config
 
-          deploy_path="/data01/virt152879/domeenid/www.jaamar.eu/htdocs/cicd"
+          remote="$SSH_SERVER"
+          ### NÄIDIS! ### deploy_path=/data01/virt146488/domeenid/www.timopuistaja.eu/puistajaprojekt
+          deploy_path=/data01/virtXXXXX/domeenid/www.domeen.tld/projektikaust
 
-          ssh zone 'command -v rsync >/dev/null || { echo "rsync is not installed on the server" >&2; exit 127; }'
-          ssh zone "mkdir -p '$deploy_path'"
-
+          ssh "$remote" 'command -v rsync >/dev/null || { echo "rsync is not installed on the server" >&2; exit 127; }'
+          ssh "$remote" "mkdir -p '$deploy_path'"
           rsync -az --delete \
             --exclude='.git*' \
             --exclude='.github*' \
-            --exclude='data/' \
             -e ssh \
-            ./ "zone:$deploy_path/"
+            ./ "$remote:$deploy_path/"
