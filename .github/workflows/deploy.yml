@@ -16,7 +16,6 @@ jobs:
           SSH_SERVER: ${{ secrets.SSH_SERVER }}
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
           SSH_PRIVATE_KEY: ${{ secrets.SSH_PRIVATE_KEY }}
-          SSH_PORT: 1022
         run: |
           set -euo pipefail
           mkdir -p ~/.ssh
