@@ -3,15 +3,15 @@ name: Deploy to Zone Media
 on:
   push:
     branches:
-      - main
+- main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+- uses: actions/checkout@v4
 
-      - name: Deploy via SSH and rsync
+- name: Deploy via SSH and rsync
         env:
           SSH_SERVER: ${{ secrets.SSH_SERVER }}
           SSH_USERNAME: ${{ secrets.SSH_USERNAME }}
@@ -35,7 +35,7 @@ jobs:
 
           remote="$SSH_SERVER"
           ### NÄIDIS! ### deploy_path=/data01/virt146488/domeenid/www.timopuistaja.eu/puistajaprojekt
-          deploy_path=/data01/virtXXXXX/domeenid/www.domeen.tld/projektikaust
+          deploy_path=/data01/virt152879/domeenid/www.jaamar.eu/htdocs/cicd
 
           ssh "$remote" 'command -v rsync >/dev/null || { echo "rsync is not installed on the server" >&2; exit 127; }'
           ssh "$remote" "mkdir -p '$deploy_path'"
